@@ -1,0 +1,24 @@
+# Virtual environment
+venv/
+env/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Test files
+Flask Deployed App/test_*.py
+Flask Deployed App/auth_results.txt
+
+# Uploads
+Flask Deployed App/static/uploads/
