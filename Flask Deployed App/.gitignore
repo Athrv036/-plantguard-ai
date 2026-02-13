@@ -1,0 +1,24 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+.env
+
+# Uploads
+static/uploads/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+test_*.py
+auth_results.txt
+
+# IDE
+.vscode/
+.idea/

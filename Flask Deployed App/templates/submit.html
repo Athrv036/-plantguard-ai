@@ -1,87 +1,105 @@
 {% extends 'base.html' %}
-{% block pagetitle %}
-{{title}}
-{% endblock pagetitle %}
+{% block pagetitle %}{{ title }} — PlantGuard AI{% endblock %}
+
 {% block body %}
+<div class="page-wrapper">
 
-<div>
-  <div class="container">
-    <!-- For demo purpose -->
-    <div class="row mb-5 text-center text-white">
-      <div class="col-lg-10 mx-auto">
-        <h1 class="display-4" style="padding-top: 2%;font-weight: 400;color: rgb(4, 54, 4);""><b>{{title}}🍂</b></h1>
-      </div>
-    </div>
-    <center>
-    <div class=" col">
-          <div class="p-3 bg-white shadow rounded-lg" style="width: 30%;">
-
-            <img src={{image_url}} width="350" height="350">
-
-          </div>
-      </div>
-      </center>
-      <br>
-      <div class=" row ">
-        <div class="col mx-auto">
-          <div class="p-5 bg-white shadow rounded-lg" style="height: 95%;">
-
-            <h5><b>
-                {% if pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or
-                pred==24 or pred==25 or pred==28 or pred==38 %}
-                Tips to Grow Healthy Plants :
-                {% else %}
-                Brief Descritpion :
-                {% endif %}
-              </b></h5>
-            <p>{{desc}}
-            </p>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col mx-auto">
-          <div class="p-5 bg-white shadow rounded-lg" style="height:95%">
-            <h5><b>
-                {% if pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or
-                pred==24 or pred==25 or pred==28 or pred==38 %}
-                Benefits :
-                {% else %}
-                Prevent This Plant Disease By follow below steps :
-                {% endif %}
-              </b></h5>
-            <p>
-              {{prevent}}
-            </p>
-          </div>
-        </div>
-
-        {% if pred!=4 %}
-        <div class="col mx-auto"">
-        <div class=" p-5 bg-white shadow rounded-lg" style="height: 95%;">
-          <center>
-            <h5><b>
-                {% if pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or
-                pred==24 or pred==25 or pred==28 or pred==38 %}
-                Fertilizer :
-                {% else %}
-                Supplements :
-                {% endif %}
-              </b></h5>
-            <br>
-            <img src={{simage}} width="300" height="350">
-            <br>
-            <br>
-            <h6>{{sname}}</h6>
-
-            <a target="_blank" href={{buy_link}}><button type="button" class="btn btn-success"
-                style="background-color: #05380b;">Buy Product</button></a>
-          </center>
-        </div>
-      </div>
+  <!-- ── Header ──────────────────────────────────── -->
+  <section class="section-header" style="margin-bottom:1.5rem;">
+    <div class="section-badge animate-in">
+      {% if pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or pred==24 or
+      pred==25 or pred==28 or pred==38 %}
+      ✅ Healthy Plant
+      {% else %}
+      ⚠️ Disease Detected
       {% endif %}
+    </div>
+    <h1 class="section-title animate-in" style="animation-delay:0.1s;">
+      <span class="gradient-text">{{ title }}</span>
+    </h1>
+  </section>
 
+  <!-- ── Hero: Image + Disease Label ─────────────── -->
+  <div class="glass-card animate-in" style="animation-delay:0.15s;margin-bottom:2rem;">
+    <div class="result-hero">
+      <img src="{{ image_url }}" alt="{{ title }}">
+      <div class="result-hero-info">
+        <div class="disease-label">{{ title }}</div>
+        {% if pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or pred==24 or
+        pred==25 or pred==28 or pred==38 %}
+        <span class="disease-status healthy">✅ Healthy</span>
+        {% else %}
+        <span class="disease-status diseased">⚠️ Diseased</span>
+        {% endif %}
+        <p style="margin-top:1rem;color:var(--text-secondary);font-size:0.95rem;line-height:1.7;">
+          {{ desc[:200] }}{% if desc|length > 200 %}...{% endif %}
+        </p>
+        <div style="margin-top:1.25rem;">
+          <a href="/index" class="btn-secondary-outline">← Scan Another Leaf</a>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- ── Details Grid ────────────────────────────── -->
+  <div class="result-grid">
+
+    <!-- Description -->
+    <div class="glass-card animate-in">
+      <div class="result-section-title">
+        <span class="icon">📋</span>
+        {% if pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or pred==24 or
+        pred==25 or pred==28 or pred==38 %}
+        Tips to Grow Healthy Plants
+        {% else %}
+        Disease Description
+        {% endif %}
+      </div>
+      <p class="result-text">{{ desc }}</p>
+    </div>
+
+    <!-- Prevention / Benefits -->
+    <div class="glass-card animate-in" style="animation-delay:0.1s;">
+      <div class="result-section-title">
+        <span class="icon">🛡️</span>
+        {% if pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or pred==24 or
+        pred==25 or pred==28 or pred==38 %}
+        Benefits
+        {% else %}
+        Prevention Steps
+        {% endif %}
+      </div>
+      <p class="result-text">{{ prevent }}</p>
+    </div>
+
+    <!-- Supplement (skip for Background class) -->
+    {% if pred != 4 %}
+    <div class="glass-card animate-in" style="animation-delay:0.2s;grid-column:1/-1;">
+      <div class="result-section-title">
+        <span class="icon">💊</span>
+        {% if pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or pred==24 or
+        pred==25 or pred==28 or pred==38 %}
+        Recommended Fertilizer
+        {% else %}
+        Recommended Supplement
+        {% endif %}
+      </div>
+      <div style="display:flex;gap:2rem;align-items:center;flex-wrap:wrap;margin-top:1rem;">
+        <img src="{{ simage }}" alt="{{ sname }}"
+          style="width:180px;height:200px;object-fit:cover;border-radius:var(--radius-md);border:1px solid var(--border-glass);">
+        <div style="flex:1;min-width:200px;">
+          <h3 style="font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:0.5rem;">{{
+            sname }}</h3>
+          <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:1rem;">
+            This product is recommended to treat or support your plant. Click below to purchase.
+          </p>
+          <a href="{{ buy_link }}" target="_blank" class="btn-primary-glow">🛒 Buy Product</a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+
 </div>
-{% endblock body %}
+{% endblock %}

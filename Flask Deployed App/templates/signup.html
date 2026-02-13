@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block pagetitle %}Sign Up — PlantGuard AI{% endblock %}
+
+{% block body %}
+<div class="page-wrapper" style="max-width:500px;">
+
+    <section class="section-header" style="margin-bottom:2rem;">
+        <div class="section-badge animate-in">🌱 Create Account</div>
+        <h1 class="section-title animate-in" style="animation-delay:0.1s;font-size:2rem;">
+            Join <span class="gradient-text">PlantGuard AI</span>
+        </h1>
+        <p class="section-subtitle animate-in" style="animation-delay:0.15s;">
+            Create your account to save diagnosis history and more.
+        </p>
+    </section>
+
+    <div class="glass-card animate-in" style="animation-delay:0.2s;">
+        <form id="signup-form">
+            <!-- Name -->
+            <div class="form-group">
+                <label class="form-label" for="signup-name">Full Name</label>
+                <input type="text" id="signup-name" class="form-input" placeholder="e.g. Athrav" required
+                    autocomplete="name">
+            </div>
+
+            <!-- Email -->
+            <div class="form-group">
+                <label class="form-label" for="signup-email">Email Address</label>
+                <input type="email" id="signup-email" class="form-input" placeholder="you@example.com" required
+                    autocomplete="email">
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label class="form-label" for="signup-password">Password</label>
+                <input type="password" id="signup-password" class="form-input" placeholder="Min 6 characters" required
+                    minlength="6" autocomplete="new-password">
+            </div>
+
+            <!-- Confirm Password -->
+            <div class="form-group">
+                <label class="form-label" for="signup-confirm">Confirm Password</label>
+                <input type="password" id="signup-confirm" class="form-input" placeholder="Re-enter password" required
+                    autocomplete="new-password">
+            </div>
+
+            <!-- Error / Success message -->
+            <div id="signup-msg" class="form-message"></div>
+
+            <button type="submit" class="btn-primary-glow" style="width:100%;justify-content:center;margin-top:0.5rem;"
+                id="signup-btn">
+                🚀 Create Account
+            </button>
+        </form>
+
+        <p class="form-footer">
+            Already have an account? <a href="/login-page">Log in →</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const form = document.getElementById('signup-form');
+    const msg = document.getElementById('signup-msg');
+    const btn = document.getElementById('signup-btn');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.className = 'form-message';
+        msg.textContent = '';
+
+        const name = document.getElementById('signup-name').value.trim();
+        const email = document.getElementById('signup-email').value.trim();
+        const password = document.getElementById('signup-password').value;
+        const confirm = document.getElementById('signup-confirm').value;
+
+        if (password !== confirm) {
+            msg.textContent = 'Passwords do not match.';
+            msg.classList.add('error');
+            return;
+        }
+
+        btn.disabled = true;
+        btn.textContent = '⏳ Creating...';
+
+        try {
+            const res = await fetch('/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password }),
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                msg.textContent = '✅ Account created! Redirecting to login...';
+                msg.classList.add('success');
+                setTimeout(() => window.location.href = '/login-page', 1500);
+            } else {
+                msg.textContent = data.error || 'Signup failed.';
+                msg.classList.add('error');
+            }
+        } catch (err) {
+            msg.textContent = 'Network error. Please try again.';
+            msg.classList.add('error');
+        }
+
+        btn.disabled = false;
+        btn.textContent = '🚀 Create Account';
+    });
+</script>
+{% endblock %}

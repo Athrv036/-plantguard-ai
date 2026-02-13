@@ -2,197 +2,95 @@
 <html lang="en">
 
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="PlantGuard AI — Detect plant diseases instantly with the power of artificial intelligence. Upload a leaf photo and get diagnosis in seconds.">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
-    
-    <link rel = "stylesheet" href = "https://cdnjs.cloudflare.com/ajax/libs/bttn.css/0.2.4/bttn.css">
+  <!-- Fonts are loaded via CSS @import -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <title> {% block pagetitle %}
-
-        {% endblock pagetitle %}</title>
-    <style>
-        .bg {
-
-            background-image: url("images/background.jpeg");
-
-            height: 100%;
-
-            /* Center and scale the image nicely */
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-        }
-
-        .file-upload input[type='file'] {
-            display: none;
-        }
-
-        body {
-            background-color: #4ECC5A;
-            /* background: -webkit-linear-gradient(to right, #66a776, #043610);
-            background: linear-gradient(to right, #5d9c6a, #059b0d); */
-            height: 100vh;
-        }
-
-        .rounded-lg {
-            border-radius: 1rem;
-        }
-
-        .custom-file-label.rounded-pill {
-            border-radius: 50rem;
-        }
-
-        .custom-file-label.rounded-pill::after {
-            border-radius: 0 50rem 50rem 0;
-        }
-
-        label {
-            background-color: rgb(2, 46, 15);
-            color: white;
-            padding: 0.5rem;
-            font-family: sans-serif;
-            border-radius: 0.3rem;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
-
-        #file-chosen {
-            margin-left: 0.3rem;
-            font-family: sans-serif;
-        }
-
-        .footer-basic {
-            padding: 40px 0;
-            background-color: #042908;
-            color: #f1f3f5;
-        }
-
-        .footer-basic ul {
-            padding: 0;
-            list-style: none;
-            text-align: center;
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 0;
-        }
-
-        .footer-basic li {
-            padding: 0 10px;
-        }
-
-        .footer-basic ul a {
-            color: inherit;
-            text-decoration: none;
-            opacity: 0.8;
-        }
-
-        .footer-basic ul a:hover {
-            opacity: 1;
-        }
-
-        .footer-basic .social {
-            text-align: center;
-            padding-bottom: 25px;
-        }
-
-        .footer-basic .social>a {
-            font-size: 24px;
-            width: 40px;
-            height: 40px;
-            line-height: 40px;
-            display: inline-block;
-            text-align: center;
-            border-radius: 50%;
-            border: 1px solid #ccc;
-            margin: 0 8px;
-            color: inherit;
-            opacity: 0.75;
-        }
-
-        .footer-basic .social>a:hover {
-            opacity: 0.9;
-        }
-
-        .footer-basic .copyright {
-            margin-top: 15px;
-            text-align: center;
-            font-size: 13px;
-            color: #aaa;
-            margin-bottom: 0;
-        }
-    </style>
+  <title>{% block pagetitle %}PlantGuard AI{% endblock %}</title>
+  {% block head %}{% endblock %}
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark " style="background-color:#05380b;">
-        <!-- <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button> -->
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="navbar-brand active">
-                    <a class="nav-link" href="/" style="color: white;">Home</a>
-                </li>
-                <li class="navbar-brand active">
-                    <a class="nav-link" href="/index" style="color: white;">AI Engine</a>
-                </li>
-                <li class="navbar-brand">
-                    <a class="nav-link" href="/market" style="color: white;">Supplements</a>
-                </li>
-                <li class="navbar-brand">
-                    <a class="nav-link" href="/contact" style="color: white;">Contact-Us</a>
-                </li>
-            </ul>
+
+  <!-- ── Navbar ──────────────────────────────────── -->
+  <nav class="navbar" id="main-nav">
+    <div
+      style="display:flex;align-items:center;justify-content:space-between;width:100%;max-width:1280px;margin:0 auto;">
+      <a href="/" style="text-decoration:none;">
+        <span class="navbar-brand-text"><span class="icon">🌿</span> PlantGuard AI</span>
+      </a>
+      <div style="display:flex;align-items:center;gap:0.25rem;">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="/" id="nav-home">Home</a></li>
+          <li><a href="/index" id="nav-engine">AI Engine</a></li>
+          <li><a href="/market" id="nav-market">Supplements</a></li>
+          <li><a href="/contact" id="nav-contact">Contact</a></li>
+        </ul>
+        <!-- Auth buttons (toggled by JS based on localStorage token) -->
+        <div class="nav-auth" id="auth-guest">
+          <a href="/login-page" class="btn-login">Log In</a>
+          <a href="/signup-page" class="btn-signup">Sign Up</a>
         </div>
-    </nav>
-    {% block body %}
-
-    {% endblock body %}
-    <div class="footer-basic">
-        <footer>
-            <center>
-            <div style="padding: 5;">
-                <a target="_blank" href='mailto:krsikx@gmail.com'><img src="https://image.flaticon.com/icons/png/512/281/281769.png" height="40" width="40"></a>&nbsp
-                <a target="_blank" href="https://www.instagram.com/krsikx_india/"><img src="https://image.flaticon.com/icons/png/512/174/174855.png" height="40" width="40"></a>&nbsp
-                <a target="_blank"href="https://www.linkedin.com/company/krsikx-india-llp/"><img src="https://image.flaticon.com/icons/png/512/174/174857.png" height="40" width="40"></a>&nbsp
-            </div>
-            </center>
-            <br>
-            <ul class="list-inline">
-                <li class="list-inline-item"><a href="/">Home</a></li>
-                <li class="list-inline-item"><a target="_blank" href="https://www.krsikx.com/">Services</a></li>
-                <li class="list-inline-item"><a target="_blank" href="https://www.krsikx.com/copy-of-solutions">About</a></li>
-                <li class="list-inline-item laptop"><a href="/index">AI Engine</a></li>
-            </ul>
-            <p class="copyright">Created by Manthan Bhikadiya & Krishna Baldaniya</p>
-        </footer>
+        <div class="nav-auth" id="auth-user" style="display:none;">
+          <span class="user-greeting">Hi, <span id="user-name-display">User</span></span>
+          <button class="btn-logout" id="logout-btn">Logout</button>
+        </div>
+      </div>
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/js/bootstrap.bundle.min.js"></script>
-</body>
-<!-- <script>
-    if (window.matchMedia("(max-width: 767px)").matches)
-    {
-        // The viewport is less than 768 pixels wide
-        document.write("This is a mobile device.");
-        window.location.replace('/mobile-device');
+  </nav>
 
-    } else {
-        
-        // The viewport is at least 768 pixels wide
-        document.write("This is a tablet or desktop.");
-    }
-</script> -->
-<!-- <script>
-    if(screen.width <= 700){
-        document.location = 'manthan2.html';
-    }
-</script> -->
+  <!-- ── Main Content ────────────────────────────── -->
+  <main>
+    {% block body %}{% endblock %}
+  </main>
+
+  <!-- ── Footer ──────────────────────────────────── -->
+  <footer class="site-footer">
+    <ul class="footer-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="/index">AI Engine</a></li>
+      <li><a href="/market">Supplements</a></li>
+      <li><a href="/contact">Contact</a></li>
+    </ul>
+    <p class="footer-credit">Built with 🌱 by PlantGuard AI &nbsp;·&nbsp; Powered by PyTorch CNN</p>
+  </footer>
+
+  <!-- ── Active Nav Highlighter + Auth State ──────── -->
+  <script>
+    (function () {
+      // Highlight active nav link
+      const path = window.location.pathname;
+      const links = document.querySelectorAll('#nav-links a');
+      links.forEach(link => {
+        if (link.getAttribute('href') === path) {
+          link.classList.add('active');
+        }
+      });
+
+      // Auth state from localStorage
+      const token = localStorage.getItem('plantguard_token');
+      const user = JSON.parse(localStorage.getItem('plantguard_user') || 'null');
+
+      if (token && user) {
+        document.getElementById('auth-guest').style.display = 'none';
+        document.getElementById('auth-user').style.display = 'flex';
+        document.getElementById('user-name-display').textContent = user.name || user.email;
+      }
+
+      // Logout
+      document.getElementById('logout-btn').addEventListener('click', function () {
+        localStorage.removeItem('plantguard_token');
+        localStorage.removeItem('plantguard_user');
+        window.location.href = '/';
+      });
+    })();
+  </script>
+
+  {% block scripts %}{% endblock %}
+</body>
+
 </html>

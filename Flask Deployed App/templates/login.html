@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block pagetitle %}Log In — PlantGuard AI{% endblock %}
+
+{% block body %}
+<div class="page-wrapper" style="max-width:500px;">
+
+    <section class="section-header" style="margin-bottom:2rem;">
+        <div class="section-badge animate-in">🔐 Welcome Back</div>
+        <h1 class="section-title animate-in" style="animation-delay:0.1s;font-size:2rem;">
+            Log In to <span class="gradient-text">PlantGuard</span>
+        </h1>
+        <p class="section-subtitle animate-in" style="animation-delay:0.15s;">
+            Enter your credentials to access your account.
+        </p>
+    </section>
+
+    <div class="glass-card animate-in" style="animation-delay:0.2s;">
+        <form id="login-form">
+            <!-- Email -->
+            <div class="form-group">
+                <label class="form-label" for="login-email">Email Address</label>
+                <input type="email" id="login-email" class="form-input" placeholder="you@example.com" required
+                    autocomplete="email">
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label class="form-label" for="login-password">Password</label>
+                <input type="password" id="login-password" class="form-input" placeholder="Enter your password" required
+                    autocomplete="current-password">
+            </div>
+
+            <!-- Error / Success message -->
+            <div id="login-msg" class="form-message"></div>
+
+            <button type="submit" class="btn-primary-glow" style="width:100%;justify-content:center;margin-top:0.5rem;"
+                id="login-btn">
+                🔓 Log In
+            </button>
+        </form>
+
+        <p class="form-footer">
+            Don't have an account? <a href="/signup-page">Sign up →</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const form = document.getElementById('login-form');
+    const msg = document.getElementById('login-msg');
+    const btn = document.getElementById('login-btn');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        msg.className = 'form-message';
+        msg.textContent = '';
+
+        const email = document.getElementById('login-email').value.trim();
+        const password = document.getElementById('login-password').value;
+
+        btn.disabled = true;
+        btn.textContent = '⏳ Logging in...';
+
+        try {
+            const res = await fetch('/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password }),
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                // Store JWT token & user info in localStorage
+                localStorage.setItem('plantguard_token', data.access_token);
+                localStorage.setItem('plantguard_user', JSON.stringify(data.user));
+
+                msg.textContent = '✅ Login successful! Redirecting...';
+                msg.classList.add('success');
+                setTimeout(() => window.location.href = '/', 1000);
+            } else {
+                msg.textContent = data.error || 'Login failed.';
+                msg.classList.add('error');
+            }
+        } catch (err) {
+            msg.textContent = 'Network error. Please try again.';
+            msg.classList.add('error');
+        }
+
+        btn.disabled = false;
+        btn.textContent = '🔓 Log In';
+    });
+</script>
+{% endblock %}
